@@ -18,83 +18,87 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#F7F8FA]/90 backdrop-blur border-b border-line">
-      <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="font-semibold tracking-tight" onClick={close}>
-          snippets<span className="text-accent">.</span>
-        </Link>
-
-        {/* Full nav — tablets and up */}
-        <div className="hidden md:flex items-center gap-5 text-sm text-inksoft">
-          <Link to="/" className="hover:text-accent">
-            Explore
+    <>
+      <nav className="sticky top-0 z-50 bg-[#F7F8FA]/90 backdrop-blur border-b border-line">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="font-semibold tracking-tight" onClick={close}>
+            snippets<span className="text-accent">.</span>
           </Link>
-          {loggedIn ? (
-            <>
-              <Link to="/dashboard" className="hover:text-accent">
-                My snippets
-              </Link>
-              <Link to="/new" className="hover:text-accent">
-                New
-              </Link>
-              <button onClick={handleLogout} className="hover:text-accent">
-                Log out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="hover:text-accent">
-                Log in
-              </Link>
-              <Link
-                to="/register"
-                className="px-3 py-1.5 rounded-md bg-ink text-white hover:opacity-90"
-              >
-                Sign up
-              </Link>
-            </>
-          )}
+
+          {/* Full nav — tablets and up */}
+          <div className="hidden md:flex items-center gap-5 text-sm text-inksoft">
+            <Link to="/" className="hover:text-accent">
+              Explore
+            </Link>
+            {loggedIn ? (
+              <>
+                <Link to="/dashboard" className="hover:text-accent">
+                  My snippets
+                </Link>
+                <Link to="/new" className="hover:text-accent">
+                  New
+                </Link>
+                <button onClick={handleLogout} className="hover:text-accent">
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="hover:text-accent">
+                  Log in
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-3 py-1.5 rounded-md bg-ink text-white hover:opacity-90"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Hamburger — mobile and small tablets only */}
+          <button
+            onClick={() => setOpen(true)}
+            className="md:hidden p-2 -mr-2 text-ink"
+            aria-label="Open menu"
+          >
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path
+                d="M2 5.5H20M2 11H20M2 16.5H20"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
         </div>
+      </nav>
 
-        {/* Hamburger — mobile and small tablets only */}
-        <button
-          onClick={() => setOpen(true)}
-          className="md:hidden p-2 -mr-2 text-ink"
-          aria-label="Open menu"
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path
-              d="M2 5.5H20M2 11H20M2 16.5H20"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* Backdrop */}
+      {/*
+        Backdrop + drawer are siblings of <nav>, not children of it.
+        <nav> has backdrop-blur, and per spec backdrop-filter creates a new
+        containing block for `fixed` descendants — nesting these inside it
+        made `h-full` resolve against nav's own ~65px height instead of the
+        viewport, cutting the drawer off right after the header row.
+      */}
       <div
         onClick={close}
         aria-hidden="true"
-        className={`md:hidden fixed inset-0 bg-black/30 transition-opacity duration-200 ${
+        className={`md:hidden fixed inset-0 z-40 bg-black/30 transition-opacity duration-200 ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       />
 
-      {/* Drawer */}
       <div
         role="dialog"
         aria-label="Menu"
         aria-modal="true"
-        className={`md:hidden fixed top-0 right-0 h-full w-72 max-w-[80%] bg-white border-l border-line shadow-xl transform transition-transform duration-200 ${
+        className={`md:hidden fixed top-0 right-0 z-50 h-full w-72 max-w-[80%] bg-white border-l border-line shadow-xl transform transition-transform duration-200 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-line">
-          <span className="font-semibold tracking-tight">
-            snippets<span className="text-accent">.</span>
-          </span>
+        <div className="flex items-center justify-end px-5 py-4 border-b border-line">
           <button onClick={close} aria-label="Close menu" className="p-1 text-ink">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path
@@ -158,6 +162,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    </nav>
+    </>
   );
 }
