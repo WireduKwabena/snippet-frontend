@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import CommentSection from "../components/CommentSection";
 import { auth, snippets } from "../api";
 
 export default function SnippetView() {
@@ -99,6 +100,8 @@ export default function SnippetView() {
           </div>
         )}
       </div>
+
+      <CommentSection slug={snippet.slug} />
     </div>
   );
 }

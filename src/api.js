@@ -79,4 +79,16 @@ export const snippets = {
   },
 };
 
+export const comments = {
+  list(slug) {
+    return api.get(`/snippets/${slug}/comments/`).then((r) => r.data);
+  },
+  create(slug, body) {
+    return api.post(`/snippets/${slug}/comments/`, { body }).then((r) => r.data);
+  },
+  remove(id) {
+    return api.delete(`/comments/${id}/`);
+  },
+};
+
 export default api;

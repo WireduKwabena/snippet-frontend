@@ -18,6 +18,10 @@ export default function PublicFeed() {
     return () => clearTimeout(timeout);
   }, [search]);
 
+  function handleDeleted(slug) {
+    setItems((prev) => prev.filter((s) => s.slug !== slug));
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
@@ -36,7 +40,7 @@ export default function PublicFeed() {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {items.map((s) => (
-            <SnippetCard key={s.slug} snippet={s} />
+            <SnippetCard key={s.slug} snippet={s} onDeleted={handleDeleted} />
           ))}
         </div>
       )}
