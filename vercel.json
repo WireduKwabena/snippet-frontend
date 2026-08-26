@@ -1,3 +1,11 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/s/:slug", "destination": "/api/snippet-meta?slug=:slug" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/snippet-meta.js": {
+      "includeFiles": "dist/index.html"
+    }
+  }
 }
