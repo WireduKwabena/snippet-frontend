@@ -14,12 +14,32 @@ function escapeHtml(str = "") {
 export default async function handler(req, res) {
   const { slug } = req.query;
   const indexPath = path.join(process.cwd(), "dist", "index.html");
-  let html = fs.readFileSync(indexPath, "utf-8");
+
+  console.log("[snippet-meta] cwd:", process.cwd());
+  console.log("[snippet-meta] looking for index.html at:", indexPath);
+  console.log("[snippet-meta] slug:", slug);
+
+  let html;
+  try {
+    html = fs.readFileSync(indexPath, "utf-8");
+    console.log("[snippet-meta] read index.html, length:", html.length);
+  } catch (err) {
+    console.log("[snippet-meta] FAILED to read index.html:", err.message);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.status(500).send(`snippet-meta: could not read index.html at ${indexPath}: ${err.message}`);
+    return;
+  }
 
   try {
-    const response = await fetch(`${API_BASE}/snippets/${slug}/`);
+    const apiUrl = `${API_BASE}/snippets/${slug}/`;
+    console.log("[snippet-meta] fetching:", apiUrl);
+    const response = await fetch(apiUrl);
+    console.log("[snippet-meta] backend response status:", response.status);
+
     if (response.ok) {
       const snippet = await response.json();
+      console.log("[snippet-meta] snippet title:", snippet.title);
+
       const title = `${escapeHtml(snippet.title)} — Snippets`;
       const description = escapeHtml(
         snippet.description ||
@@ -27,14 +47,6 @@ export default async function handler(req, res) {
       );
       const url = `https://${req.headers.host}/s/${slug}`;
 
-      // Bots that skip JS (Discord, Slack, X, etc.) only ever see this
-      // server-rendered HTML — React updating the title client-side never
-      // reaches them. Replace the base template's generic tags IN PLACE
-      // (not append) — index.html already ships default og:title/
-      // og:description/og:type for the homepage, and appending new ones
-      // instead of replacing would leave duplicates. Crawlers use the
-      // FIRST occurrence of a given og: property, so a duplicate means
-      // the generic one silently wins and this whole fix does nothing.
       html = html
         .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
         .replace(
@@ -61,11 +73,12 @@ export default async function handler(req, res) {
 <meta name="twitter:description" content="${description}" />
 </head>`
         );
+      console.log("[snippet-meta] final html length:", html.length);
+    } else {
+      console.log("[snippet-meta] backend returned non-OK status, serving default html unmodified");
     }
-  } catch {
-    // Snippet fetch failed (private, deleted, or API temporarily down) —
-    // fall back to the default index.html as-is. Not fatal; the SPA
-    // itself still handles the "not found" case once it loads.
+  } catch (err) {
+    console.log("[snippet-meta] fetch/processing error:", err.message);
   }
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
