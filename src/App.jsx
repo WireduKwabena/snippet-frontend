@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CollectionView from "./pages/CollectionView";
+import Collections from "./pages/Collections";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import PublicFeed from "./pages/PublicFeed";
@@ -17,11 +19,20 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/s/:slug" element={<SnippetView />} />
+        <Route path="/c/:slug" element={<CollectionView />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/collections"
+          element={
+            <ProtectedRoute>
+              <Collections />
             </ProtectedRoute>
           }
         />

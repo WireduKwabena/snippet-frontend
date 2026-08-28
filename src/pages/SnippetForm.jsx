@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { snippets } from "../api";
+import { collections, snippets } from "../api";
 
 const LANGUAGES = [
   "python", "javascript", "typescript", "dart", "java",
@@ -18,10 +18,16 @@ export default function SnippetForm() {
     code: "",
     language: "javascript",
     tags: "",
+    collection: "",
     is_public: true,
   });
+  const [myCollections, setMyCollections] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    collections.list().then(setMyCollections).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (editing) {
@@ -32,6 +38,7 @@ export default function SnippetForm() {
           code: data.code,
           language: data.language,
           tags: data.tag_names.join(", "),
+          collection: data.collection_info?.slug || "",
           is_public: data.is_public,
         })
       );
@@ -98,6 +105,20 @@ export default function SnippetForm() {
             onChange={(e) => update("tags", e.target.value)}
           />
         </div>
+        {myCollections.length > 0 && (
+          <select
+            className="w-full border border-line rounded-md px-3 py-2 text-sm"
+            value={form.collection}
+            onChange={(e) => update("collection", e.target.value)}
+          >
+            <option value="">No collection</option>
+            {myCollections.map((c) => (
+              <option key={c.slug} value={c.slug}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        )}
         <textarea
           className="w-full border border-line rounded-md px-3 py-2 text-sm font-mono-brand h-64"
           placeholder="Paste your code…"

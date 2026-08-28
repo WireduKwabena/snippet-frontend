@@ -91,4 +91,22 @@ export const comments = {
   },
 };
 
+export const collections = {
+  list() {
+    return api.get("/collections/").then((r) => r.data);
+  },
+  get(slug) {
+    return api.get(`/collections/${slug}/`).then((r) => r.data);
+  },
+  create(payload) {
+    return api.post("/collections/", payload).then((r) => r.data);
+  },
+  update(slug, payload) {
+    return api.patch(`/collections/${slug}/`, payload).then((r) => r.data);
+  },
+  remove(slug) {
+    return api.delete(`/collections/${slug}/`);
+  },
+};
+
 export default api;

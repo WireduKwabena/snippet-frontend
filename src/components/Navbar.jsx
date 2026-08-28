@@ -35,6 +35,9 @@ export default function Navbar() {
                 <Link to="/dashboard" className="hover:text-accent">
                   My snippets
                 </Link>
+                <Link to="/collections" className="hover:text-accent">
+                  Collections
+                </Link>
                 <Link to="/new" className="hover:text-accent">
                   New
                 </Link>
@@ -127,6 +130,13 @@ export default function Navbar() {
                 className="px-3 py-2.5 rounded-md hover:bg-accentsoft hover:text-accent"
               >
                 My snippets
+              </Link>
+              <Link
+                to="/collections"
+                onClick={close}
+                className="px-3 py-2.5 rounded-md hover:bg-accentsoft hover:text-accent"
+              >
+                Collections
               </Link>
               <Link
                 to="/new"

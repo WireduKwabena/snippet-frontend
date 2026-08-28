@@ -69,6 +69,15 @@ export default function SnippetView() {
         ))}
       </div>
 
+      {snippet.collection_info && (
+        <Link
+          to={`/c/${snippet.collection_info.slug}`}
+          className="inline-block text-xs text-accent hover:underline mt-3"
+        >
+          in {snippet.collection_info.name}
+        </Link>
+      )}
+
       <div className="mt-6 relative">
         <button
           onClick={handleCopy}
