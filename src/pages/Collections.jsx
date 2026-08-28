@@ -13,7 +13,7 @@ export default function Collections() {
   useEffect(() => {
     collections
       .list()
-      .then(setItems)
+      .then((data) => setItems(data.results ?? data))
       .finally(() => setLoading(false));
   }, []);
 

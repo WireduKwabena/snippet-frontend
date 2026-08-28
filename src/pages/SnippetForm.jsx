@@ -26,7 +26,10 @@ export default function SnippetForm() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    collections.list().then(setMyCollections).catch(() => {});
+    collections
+      .list()
+      .then((data) => setMyCollections(data.results ?? data))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {

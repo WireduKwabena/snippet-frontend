@@ -56,7 +56,14 @@ export default function SnippetCard({ snippet, onDeleted }) {
 
       <div className="relative flex items-center justify-between mt-3">
         <span className="text-xs text-inksoft pointer-events-none">
-          by {snippet.owner} · {snippet.view_count} views
+          by{" "}
+          <Link
+            to={`/u/${snippet.owner}`}
+            className="pointer-events-auto hover:text-accent hover:underline"
+          >
+            {snippet.owner}
+          </Link>{" "}
+          · {snippet.view_count} views
         </span>
         {isOwner && (
           <div className="flex gap-3">

@@ -96,7 +96,11 @@ export default function SnippetView() {
 
       <div className="flex items-center justify-between mt-4 text-xs text-inksoft">
         <span>
-          by {snippet.owner} · {snippet.view_count} views
+          by{" "}
+          <Link to={`/u/${snippet.owner}`} className="hover:text-accent hover:underline">
+            {snippet.owner}
+          </Link>{" "}
+          · {snippet.view_count} views
         </span>
         {isOwner && (
           <div className="flex gap-4">

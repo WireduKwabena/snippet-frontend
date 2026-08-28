@@ -92,8 +92,8 @@ export const comments = {
 };
 
 export const collections = {
-  list() {
-    return api.get("/collections/").then((r) => r.data);
+  list(params = {}) {
+    return api.get("/collections/", { params }).then((r) => r.data);
   },
   get(slug) {
     return api.get(`/collections/${slug}/`).then((r) => r.data);
@@ -106,6 +106,12 @@ export const collections = {
   },
   remove(slug) {
     return api.delete(`/collections/${slug}/`);
+  },
+};
+
+export const users = {
+  profile(username) {
+    return api.get(`/users/${username}/`).then((r) => r.data);
   },
 };
 

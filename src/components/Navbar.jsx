@@ -38,6 +38,9 @@ export default function Navbar() {
                 <Link to="/collections" className="hover:text-accent">
                   Collections
                 </Link>
+                <Link to={`/u/${auth.username()}`} className="hover:text-accent">
+                  My profile
+                </Link>
                 <Link to="/new" className="hover:text-accent">
                   New
                 </Link>
@@ -137,6 +140,13 @@ export default function Navbar() {
                 className="px-3 py-2.5 rounded-md hover:bg-accentsoft hover:text-accent"
               >
                 Collections
+              </Link>
+              <Link
+                to={`/u/${auth.username()}`}
+                onClick={close}
+                className="px-3 py-2.5 rounded-md hover:bg-accentsoft hover:text-accent"
+              >
+                My profile
               </Link>
               <Link
                 to="/new"
