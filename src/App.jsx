@@ -1,9 +1,10 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CollectionView from "./pages/CollectionView";
 import Collections from "./pages/Collections";
 import Dashboard from "./pages/Dashboard";
+import EmbedView from "./pages/EmbedView";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PublicFeed from "./pages/PublicFeed";
@@ -12,9 +13,13 @@ import SnippetForm from "./pages/SnippetForm";
 import SnippetView from "./pages/SnippetView";
 
 export default function App() {
+  const location = useLocation();
+  // /embed/* is meant to sit inside someone else's <iframe> — no app chrome.
+  const isEmbed = location.pathname.startsWith("/embed/");
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      {!isEmbed && <Navbar />}
       <Routes>
         <Route path="/" element={<PublicFeed />} />
         <Route path="/login" element={<Login />} />
@@ -22,6 +27,7 @@ export default function App() {
         <Route path="/s/:slug" element={<SnippetView />} />
         <Route path="/c/:slug" element={<CollectionView />} />
         <Route path="/u/:username" element={<Profile />} />
+        <Route path="/embed/:slug" element={<EmbedView />} />
         <Route
           path="/dashboard"
           element={
